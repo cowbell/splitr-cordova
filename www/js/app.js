@@ -6,12 +6,12 @@ App.Router.map(function() {
 
 App.IndexRoute = Ember.Route.extend({
     model: function() {
-        return ["red", "yellow", "blue"];
+        return ["red", "yellow", "blue", "red", "yellow", "blue", "red", "yellow", "blue", "red", "yellow", "blue"];
     }
 });
 
-ref = new Firebase("https://splitr.firebaseio.com");
+// ref = new Firebase("https://splitr.firebaseio.com");
 
-auth = new FirebaseSimpleLogin(ref, function(error, user) {
-    alert(user);
-});
+// auth = new FirebaseSimpleLogin(ref, function(error, user) {
+//     alert(user);
+// });

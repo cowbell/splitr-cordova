@@ -1,0 +1,17 @@
+*.keystore
+*.sw*
+/platforms/^.*
+/node_modules/
+
+# Android
+*.apk
+*.ap_
+*.dex
+*.class
+
+ant-build/
+ant-gen/
+
+/platforms/android/assets/www/
+/platforms/android/res/xml/config.xml
+/platforms/android/cordova/defaults.xml

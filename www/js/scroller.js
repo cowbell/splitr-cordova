@@ -27,10 +27,14 @@ App.Scroller = Ember.View.extend({
         $(window).off(this.resizeHandler);
     },
 
+    shouldIgnoreScroll: function (event) {
+        return /input|textarea|select/i.test(event.target.tagName);
+    },
+
     touchStart: function (event) {
-	if (event.target.tagNamevent.match(/input|textarea|select/i)) {
-	    return;
-	}
+        if (this.shouldIgnoreScroll(event)) {
+            return;
+        }
 
 	this.scroller.doTouchStart(event.originalEvent.touches, event.timeStamp);
 	event.preventDefault();
@@ -49,9 +53,9 @@ App.Scroller = Ember.View.extend({
     },
 
     mouseDown: function (event) {
-	if (event.target.tagName.match(/input|textarea|select/i)) {
-	    return;
-	}
+        if (this.shouldIgnoreScroll(event)) {
+            return;
+        }
 
 	this.scroller.doTouchStart([{ pageX: event.pageX, pageY: event.pageY }], event.timeStamp);
         this.mousedown = true;

@@ -9,10 +9,7 @@ App.Scroller = Ember.View.extend({
         options.zooming = false;
 
         this.scroller = new Scroller(function (left, top) {
-            view.$().css({
-                marginLeft: left ? (-left) + "px" : "",
-                marginTop: top ? (-top) + "px" : ""
-            });
+            view.$().css({ transform: "translate3D(" + (-left) + "px, " + (-top) + "px, 0)" });
 	}, options);
 
         this.resizeHandler = function () {

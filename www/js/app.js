@@ -9,9 +9,3 @@ App.IndexRoute = Ember.Route.extend({
         return ["red", "yellow", "blue", "red", "yellow", "blue", "red", "yellow", "blue", "red", "yellow", "blue"];
     }
 });
-
-// ref = new Firebase("https://splitr.firebaseio.com");
-
-// auth = new FirebaseSimpleLogin(ref, function(error, user) {
-//     alert(user);
-// });

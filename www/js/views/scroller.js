@@ -3,6 +3,7 @@ App.Scroller = Ember.View.extend({
 
     didInsertElement: function () {
         var view = this,
+            element = this.get("element"),
             options = this.getProperties("scrollingX", "scrollingY", "bouncing");
 
         options.zooming = false;
@@ -27,57 +28,52 @@ App.Scroller = Ember.View.extend({
         $(window).off(this.resizeHandler);
     },
 
-    shouldIgnoreScroll: function (event) {
-        return /input|textarea|select/i.test(event.target.tagName);
-    },
-
     touchStart: function (event) {
-        if (this.shouldIgnoreScroll(event)) {
-            return;
-        }
-
-	this.scroller.doTouchStart(event.originalEvent.touches, event.timeStamp);
-	event.preventDefault();
+        this.start(event.originalEvent.touches, event.timeStamp);
     },
 
     touchMove: function (event) {
-	this.scroller.doTouchMove(event.originalEvent.touches, event.timeStamp, event.scale);
+        if (!this.get("isMoving")) {
+	    return;
+	}
+
+        this.move(event.originalEvent.touches, event.timeStamp);
     },
 
     touchEnd: function (event) {
-	this.scroller.doTouchEnd(event.timeStamp);
+        if (!this.get("isMoving")) {
+	    return;
+	}
+
+        this.end(event.timeStamp);
     },
 
     touchCancel: function (event) {
-	this.scroller.doTouchEnd(event.timeStamp);
+        if (!this.get("isMoving")) {
+	    return;
+	}
+
+        this.end(event.timeStamp);
     },
 
     mouseDown: function (event) {
-        if (this.shouldIgnoreScroll(event)) {
-            return;
-        }
-
-	this.scroller.doTouchStart([{ pageX: event.pageX, pageY: event.pageY }], event.timeStamp);
-        this.mousedown = true;
-
-        event.preventDefault();
+        this.start([{ pageX: event.pageX, pageY: event.pageY }], event.timeStamp);
     },
 
     mouseMove: function (event) {
-	if (!this.mousedown) {
+        if (!this.get("isMoving")) {
 	    return;
 	}
 
-	this.scroller.doTouchMove([{ pageX: event.pageX, pageY: event.pageY }], event.timeStamp);
+        this.move([{ pageX: event.pageX, pageY: event.pageY }], event.timeStamp);
     },
 
     mouseUp: function (event) {
-	if (!this.mousedown) {
+        if (!this.get("isMoving")) {
 	    return;
 	}
 
-	this.scroller.doTouchEnd(event.timeStamp);
-	this.mousedown = false;
+        this.end(event.timeStamp);
     },
 
     resize: function (event) {
@@ -85,5 +81,19 @@ App.Scroller = Ember.View.extend({
             container = element.parentNode;
 
 	this.scroller.setDimensions(container.clientWidth, container.clientHeight, element.offsetWidth, element.offsetHeight);
+    },
+
+    start: function (positions, timestamp) {
+        this.set("isMoving", true);
+	this.scroller.doTouchStart(positions, timestamp);
+    },
+
+    move: function (positions, timestamp) {
+	this.scroller.doTouchMove(positions, timestamp);
+    },
+
+    end: function (timestamp) {
+	this.scroller.doTouchEnd(timestamp);
+        this.set("isMoving", false);
     }
 });
